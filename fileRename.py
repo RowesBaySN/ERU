@@ -48,21 +48,28 @@ def set_filename_details():
         3) MMI2 - Mavic Mini 2
         4) SPRO - Swell Pro Splash Drone
         """)
+    valid_camera_selection = False
     valid_drone_selection = False
     while not valid_drone_selection:
         drone_selection = input(">>> ")
         if drone_selection == "1":
             drone = "MAIR"
             valid_drone_selection = True
+            valid_camera_selection = True
+            camera = "STK"
         if drone_selection == "2":
             drone = "M210"
             valid_drone_selection = True
         if drone_selection == "3":
             drone = "MMI2"
             valid_drone_selection = True
+            valid_camera_selection = True
+            camera = "STK"
         if drone_selection == "4":
             drone = "SPRO"
             valid_drone_selection = True
+            valid_camera_selection = True
+            camera = "STK"
 
     # Get the camera used while flying the drone.
     print(""" Select Camera:
@@ -70,9 +77,8 @@ def set_filename_details():
     2) Z30 - Zoom camera for Matrice 210
     3) X5S - 5.7K camera for Matrice 210
     4) MSP - Multi Spectral Camera
-    5) STK - Stock for Mavic Air, Mini 2 & Splash Drone
     """)
-    valid_camera_selection = False
+    
     while not valid_camera_selection:
         camera_selection = input(">>> ")
         if camera_selection == "1":
@@ -87,11 +93,8 @@ def set_filename_details():
         elif camera_selection == "4":
             camera = "MSP"
             valid_camera_selection = True
-        elif camera_selection == "5":
-            camera = "STK"
-            valid_camera_selection = True
         else:
-            print("invalid input, enter either 1 , 2 , 3 , 4 or 5 ")
+            print("invalid input, enter either 1 , 2 , 3 , 4")
 
     # Return the filename to the function to be used for renaming the files.
     return "{}_{}_{}_{}_".format(location, date, drone, camera)
