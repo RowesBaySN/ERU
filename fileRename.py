@@ -2,10 +2,14 @@
 
 import os
 
+file_type_to_folder = {".jpg":"Image",".png":"Image",".avi":"Video",".mp4":"Video",".mov":"Video"}
+folder_types = ["Image", "Video", "ThermalData", "Misc"]
+
+
 def main():
     valid_input = False
     while not valid_input:
-        print(""" Menu: 
+        print(""" Menu:
             1) Change file details
             2) Commit filename changes
             3) Exit
@@ -78,7 +82,7 @@ def set_filename_details():
     3) X5S - 5.7K camera for Matrice 210
     4) MSP - Multi Spectral Camera
     """)
-    
+
     while not valid_camera_selection:
         camera_selection = input(">>> ")
         if camera_selection == "1":
@@ -106,14 +110,15 @@ def commit_filename_changes(new_filename, file_source, starting_file_number):
         source = file_source + file
         file_extension = "." + file.split('.')[-1]
         lower_file_extension = file_extension.lower()
-        print(lower_file_extension)
-        #TODO: add in array of file types to be sorted through.
-        if lower_file_extension == ".jpg" or lower_file_extension == ".png":
-            sub_folder_name = "Image/"
-        elif lower_file_extension == ".mp4" or lower_file_extension == ".mov":
-            sub_folder_name = "Video/"
-        else:
-            sub_folder_name = "Misc/"
+        file_type_allocated = False
+        while not file_type_allocated:         
+            if lower_file_extension in file_type_to_folder:
+                sub_folder_name = file_type_to_folder.get(lower_file_extension) + "/"
+                file_type_allocated = True                
+            else:
+                sub_folder_name = "Misc/"
+                file_type_allocated = True
+            
         destination = new_filename + "{:03d}".format(starting_file_number) + file_extension
         new_destination = file_source + sub_folder_name + destination
         isFile = os.path.isfile(source)
@@ -121,8 +126,8 @@ def commit_filename_changes(new_filename, file_source, starting_file_number):
             os.rename(source, new_destination)
             starting_file_number += 1
         else:
-            break
-            
+            continue
+
 
 def has_numbers(string):
     return any(char.isdigit() for char in string)
@@ -135,18 +140,9 @@ def get_file_source():
     file_source = input(">>>")
     formatted_source = file_source.replace(" ", "") + r"/"
     """Create new folders"""
-    #for Images
-    dir = "Image"
-    path = os.path.join(formatted_source, dir)
-    os.mkdir(path)
-    #for Videos
-    dir = "Video"
-    path = os.path.join(formatted_source, dir)
-    os.mkdir(path)
-    #for Misc.
-    dir = "Misc"  
-    path = os.path.join(formatted_source, dir)
-    os.mkdir(path)
+    for folder in folder_types: 
+        path = os.path.join(formatted_source, folder)
+        os.mkdir(path)
     print("Folders Created")
     return formatted_source
 
